@@ -54,7 +54,7 @@ NetlinkConn::~NetlinkConn() {
 	close(sock_fd);
 }
 
-long int NetlinkConn::recvmsg() {
+long int NetlinkConn::recvMsg() {
 	return ::recvmsg(sock_fd, &msg, 0);
 }
 

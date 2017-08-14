@@ -26,7 +26,7 @@ public:
 	struct msghdr msg;
 	NetlinkConn();
 	~NetlinkConn();
-	long int recvmsg();
+	long int recvMsg();
 	unsigned char* getMsg();
 };
 

@@ -44,10 +44,10 @@ void PacketBuffer::storePacket(unsigned char* pkt) {
 
 	/*printf("writing to buffer %u index %u\n", tmp_current_buffer,
 	 tmp_current_buffer_pointer - 1);*/
-	printf(
-			"Packet for source address: %u.%u.%u.%u:%u destination address: %u.%u.%u.%u:%u len: %u seq: %u\n",
-			NIPQUAD(tmpPkt.sip), tmpPkt.sport, NIPQUAD(tmpPkt.dip),
-			tmpPkt.dport, tmpPkt.pkt_len, tmpPkt.seq);
-
+	/*printf(
+	 "Packet for source address: %u.%u.%u.%u:%u destination address: %u.%u.%u.%u:%u len: %u seq: %u\n",
+	 NIPQUAD(tmpPkt.sip), tmpPkt.sport, NIPQUAD(tmpPkt.dip),
+	 tmpPkt.dport, tmpPkt.pkt_len, tmpPkt.seq);
+	 */
 	return;
 }

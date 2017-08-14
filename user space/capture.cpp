@@ -1,5 +1,4 @@
 #include "capture.h"
-#include "iostream"
 /*
  * 暂时都是c语言，但是考虑数据结构可用stl所以用了c++
  * 序列号为0的是udp数据？？
@@ -18,7 +17,7 @@ PacketBuffer* packet_buffer;
 void storage_loop(NetlinkConn& nlConn) {
 	while (1) {
 		int l;
-		l = nlConn.recvmsg();
+		l = nlConn.recvMsg();
 		for (int i = 0; i < l - 20; i += 20) {
 
 			packet_buffer->storePacket(nlConn.getMsg() + i);
@@ -34,18 +33,27 @@ void buffer_changer() {
 		sleep(1);
 		//switch buffer variable
 		//note that may cause racing condition
-		//todo: call analysis threads
+		std::thread t =
+				std::thread(analysis_buffer,
+						packet_buffer->packet_buffers[packet_buffer->current_buffer],
+						packet_buffer->packet_buffer_pointer[packet_buffer->current_buffer]);
+		t.detach();
 		packet_buffer->switchBuffer();
 	}
 
 }
 
+void analysis_buffer(PktHdr * buffer, unsigned int len) {
+	PacketHolder pktHolder;
+	printf("started analysis\n");
+	for (unsigned int i = 0; i < len; i++) {
+		pktHolder.insertPkt(&(buffer[i]));
+	}
+	pktHolder.printTraffic();
+	printf("ended analysis\n");
+}
+
 int main() {
-	PktHdr test1;
-	test1.sip=135792468;
-	test1.dip=241241241;
-	std::cout<<test1.makeKey()<<std::endl;
-	while (1);
 	packet_buffer = new PacketBuffer;
 	NetlinkConn netlink_connection;
 	std::thread t_storage(storage_loop, std::ref(netlink_connection));
